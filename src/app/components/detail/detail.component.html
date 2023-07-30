@@ -1,0 +1,40 @@
+<button class="detail__button-back" (click)="_navigateBack()">
+  <mat-icon fontIcon="home"></mat-icon>
+</button>
+
+<div *ngIf="_personDetail$ | async as person" class="detail__container">
+  <div class="detail__item-row">
+    <div class="detail__item-label">Name</div>
+    <div class="detail__item-value">{{ person.name }}</div>
+  </div>
+
+  <div class="detail__item-row">
+    <div class="detail__item-label">Height</div>
+    <div class="detail__item-value">{{ person.height }} cm</div>
+  </div>
+
+  <div class="detail__item-row">
+    <div class="detail__item-label">Mass</div>
+    <div class="detail__item-value">{{ person.mass }} kg</div>
+  </div>
+
+  <div class="detail__item-row">
+    <div class="detail__item-label">Gender</div>
+    <div class="detail__item-value">{{ person.gender }}</div>
+  </div>
+
+  <div class="detail__item-row">
+    <div class="detail__item-label">Birth year</div>
+    <div class="detail__item-value">{{ person.birth_year }}</div>
+  </div>
+
+  <div class="detail__item-row">
+    <div class="detail__item-label">Hair color</div>
+    <div class="detail__item-value">{{ person.hair_color }}</div>
+  </div>
+
+  <div class="detail__item-row">
+    <div class="detail__item-label">Skin color</div>
+    <div class="detail__item-value">{{ person.skin_color }}</div>
+  </div>
+</div>

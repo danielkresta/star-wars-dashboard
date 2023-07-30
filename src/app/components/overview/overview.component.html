@@ -1,0 +1,44 @@
+<mat-form-field class="overview__search">
+  <mat-label>Search characters</mat-label>
+  <input
+    matInput
+    type="text"
+    [ngModel]="_searchQuery$.value"
+    (ngModelChange)="_search($event)"
+  />
+</mat-form-field>
+
+<div *ngIf="_filteredPeople$ | async as people" class="overview__container">
+  <!-- <mat-spinner *ngIf="_isLoading$ | async; else notLoading"></mat-spinner> -->
+  <!-- Because I can't get the spinner to work -->
+  <div *ngIf="_isLoading$ | async; else notLoading">Loading...</div>
+  <ng-template #notLoading>
+    <table mat-table [dataSource]="people.results" class="mat-elevation-z8">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="birthYear">
+        <th mat-header-cell *matHeaderCellDef>Birth year</th>
+        <td mat-cell *matCellDef="let element">{{ element.birth_year }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="_displayedColumns"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: _displayedColumns"
+        (click)="_openDetail(row.id)"
+      >
+        >
+      </tr>
+    </table>
+  </ng-template>
+
+  <mat-paginator
+    [length]="people.count"
+    [pageSize]="10"
+    (page)="_changePage($event)"
+  >
+  </mat-paginator>
+</div>

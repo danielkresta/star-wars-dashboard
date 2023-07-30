@@ -1,0 +1,28 @@
+.detail__button-back {
+  margin: 10px 20px;
+}
+
+.detail__container {
+  margin: 10px 20px;
+  display: flex;
+  flex-direction: column;
+  border: solid 1px lightblue;
+  width: fit-content;
+
+  > :not(:last-child) {
+    border-bottom: solid 1px lightgrey;
+  }
+}
+
+.detail__item-row {
+  padding: 10px;
+  display: flex;
+}
+
+.detail__item-label {
+  width: 100px;
+}
+
+.detail__item-value {
+  width: 200px;
+}

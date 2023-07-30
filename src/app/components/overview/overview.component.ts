@@ -10,6 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import {
   BehaviorSubject,
   Observable,
+  auditTime,
   combineLatest,
   distinctUntilChanged,
   map,
@@ -51,14 +52,11 @@ export class OverviewComponent {
 
   protected readonly _searchQuery$ = new BehaviorSubject<string>('');
   protected readonly searchQuery$ = this._searchQuery$.pipe(
-    distinctUntilChanged()
+    distinctUntilChanged(),
+    auditTime(1000)
   );
 
   protected readonly _people$ = this._getPeople$();
-  protected readonly _filteredPeople$ = this._getFilteredPeople$(
-    this._people$,
-    this.searchQuery$
-  );
 
   protected _displayedColumns = ['name', 'birthYear'];
 
@@ -75,9 +73,11 @@ export class OverviewComponent {
   }
 
   private _getPeople$(): Observable<IResponse<Person[]>> {
-    return this.page$.pipe(
+    return combineLatest([this.page$, this.searchQuery$]).pipe(
       tap(() => this._isLoading$.next(true)),
-      switchMap((page) => this._apiService.getPeople(page)),
+      switchMap(([page, search]) =>
+        this._apiService.getPeople({ page, search })
+      ),
       map((people) => ({
         ...people,
         results: people.results.map((person) => ({
@@ -92,27 +92,5 @@ export class OverviewComponent {
   private _extractIdFromUrl(url: string): number {
     const [https, empty, base, api, people, id] = url.split('/');
     return Number(id);
-  }
-
-  private _getFilteredPeople$(
-    people$: Observable<IResponse<Person[]>>,
-    searchQuery$: Observable<string>
-  ): Observable<IResponse<Person[]>> {
-    return combineLatest([people$, searchQuery$]).pipe(
-      map(([people, searchQuery]) => ({
-        ...people,
-        results: this._filterPeople(people.results, searchQuery),
-      }))
-    );
-  }
-
-  private _filterPeople(people: Person[], searchQuery: string): Person[] {
-    const filteredFields: (keyof Person)[] = ['name'];
-
-    return people.filter((person) =>
-      filteredFields.some((field) =>
-        person[field].toString().includes(searchQuery)
-      )
-    );
   }
 }

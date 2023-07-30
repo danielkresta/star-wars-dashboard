@@ -12,11 +12,14 @@ export class ApiService {
 
   private _baseUrl = 'https://swapi.dev/api/';
 
-  getPeople(page = 1): Observable<IResponse<IPerson[]>> {
+  getPeople(params: {
+    page: number;
+    search: string;
+  }): Observable<IResponse<IPerson[]>> {
     return this._httpClient.get<IResponse<IPerson[]>>(
       this._baseUrl + 'people',
       {
-        params: { page },
+        params,
       }
     );
   }

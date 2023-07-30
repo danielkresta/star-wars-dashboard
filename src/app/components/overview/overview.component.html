@@ -8,7 +8,7 @@
   />
 </mat-form-field>
 
-<div *ngIf="_filteredPeople$ | async as people" class="overview__container">
+<div *ngIf="_people$ | async as people" class="overview__container">
   <!-- <mat-spinner *ngIf="_isLoading$ | async; else notLoading"></mat-spinner> -->
   <!-- Because I can't get the spinner to work -->
   <div *ngIf="_isLoading$ | async; else notLoading">Loading...</div>
